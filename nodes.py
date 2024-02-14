@@ -1,6 +1,7 @@
 import os, argparse
 import sys
 from .scripts.gradio.i2v_test import Image2Video
+import folder_paths
 sys.path.insert(1, os.path.join(sys.path[0], 'lvdm'))
 
 resolutions=["576_1024","320_512","256_256"]
@@ -21,7 +22,7 @@ class DynamiCrafterLoader:
     CATEGORY = "DynamiCrafter"
 
     def run_inference(self,resolution,frame_length=16):
-        image2video = Image2Video('./tmp/', resolution=resolution,frame_length=frame_length)
+        image2video = Image2Video(folder_paths.output_directory, resolution=resolution,frame_length=frame_length)
         return (image2video,)
 
 class DynamiCrafterSimple:

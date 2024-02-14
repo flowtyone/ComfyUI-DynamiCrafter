@@ -11,7 +11,8 @@ from pytorch_lightning import seed_everything
 import folder_paths
 
 comfy_path = os.path.dirname(folder_paths.__file__)
-models_path=f'{comfy_path}/models/'
+#models_path=f'{comfy_path}/models/'
+models_path = os.path.join(folder_paths.models_dir, 'dynamicrafter')
 config_path=f'{comfy_path}/custom_nodes/ComfyUI-DynamiCrafter/'
 
 class Image2Video():
@@ -22,7 +23,7 @@ class Image2Video():
         self.result_dir = result_dir
         if not os.path.exists(self.result_dir):
             os.mkdir(self.result_dir)
-        ckpt_path=models_path+'checkpoints/dynamicrafter_'+resolution.split('_')[1]+'_v1/model.ckpt'
+        ckpt_path=models_path+'/dynamicrafter_'+resolution.split('_')[1]+'_v1/model.ckpt'
         config_file=config_path+'configs/inference_'+resolution.split('_')[1]+'_v1.0.yaml'
         config = OmegaConf.load(config_file)
         OmegaConf.update(config, "model.params.unet_config.params.temporal_length", frame_length)
@@ -99,12 +100,12 @@ class Image2Video():
     def download_model(self):
         REPO_ID = 'Doubiiu/DynamiCrafter_'+str(self.resolution[1]) if self.resolution[1]!=256 else 'Doubiiu/DynamiCrafter'
         filename_list = ['model.ckpt']
-        if not os.path.exists(models_path+'checkpoints/dynamicrafter_'+str(self.resolution[1])+'_v1/'):
-            os.makedirs(models_path+'checkpoints/dynamicrafter_'+str(self.resolution[1])+'_v1/')
+        if not os.path.exists(models_path+'/dynamicrafter_'+str(self.resolution[1])+'_v1/'):
+            os.makedirs(models_path+'/dynamicrafter_'+str(self.resolution[1])+'_v1/')
         for filename in filename_list:
-            local_file = os.path.join(models_path+'checkpoints/dynamicrafter_'+str(self.resolution[1])+'_v1/', filename)
+            local_file = os.path.join(models_path+'/dynamicrafter_'+str(self.resolution[1])+'_v1/', filename)
             if not os.path.exists(local_file):
-                hf_hub_download(repo_id=REPO_ID, filename=filename, local_dir=models_path+'checkpoints/dynamicrafter_'+str(self.resolution[1])+'_v1/', local_dir_use_symlinks=False)
+                hf_hub_download(repo_id=REPO_ID, filename=filename, local_dir=models_path+'/dynamicrafter_'+str(self.resolution[1])+'_v1/', local_dir_use_symlinks=False)
     
 if __name__ == '__main__':
     i2v = Image2Video()
